@@ -1,0 +1,14 @@
+{
+  "name": "faas.database",
+  "version": "1.0.0",
+  "description": "MUCPD FaaS database manager.",
+  "main": "index.js",
+  "dependencies": {
+    "mongodb": "^3.6.3",
+    "zeromq": "^6.0.0-beta.6"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "author": "Joaquin Rovira",
+  "license": "ISC"
+}

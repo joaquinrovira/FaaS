@@ -1,0 +1,12 @@
+{
+  "name": "faas.lib",
+  "version": "1.0.0",
+  "description": "MUCPD FaaS proxies library.",
+  "main": "",
+  "dependencies": {
+    "zeromq": "^6.0.0-beta.6"
+  },
+  "devDependencies": {},
+  "author": "Joaquin Rovira",
+  "license": "ISC"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "faas.job-queue",
+  "version": "1.0.0",
+  "description": "MUCPD FaaS job queue manager.",
+  "main": "index.js",
+  "dependencies": {
+    "zeromq": "^6.0.0-beta.6"
+  },
+  "devDependencies": {},
+  "author": "Joaquin Rovira",
+  "license": "ISC"
+}

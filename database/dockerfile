@@ -1,0 +1,12 @@
+FROM node:15-alpine
+
+# Install npm
+RUN apk update && apk add npm
+
+# Copy source files to /app
+RUN mkdir /app
+WORKDIR /app
+COPY . .
+RUN npm install
+
+CMD [ "node", "src/index.js" ]
