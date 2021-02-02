@@ -1,4 +1,4 @@
-# Register function
+# Execute function
 
 Execute a function. The parameters are given via the post body. Responds with the queue's job's id.
 
