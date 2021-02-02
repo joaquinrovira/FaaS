@@ -2,8 +2,9 @@ const DBManager = require("./DBManager")
 
 
 const DB_URL = process.env.DB_URL;
+const PORT = process.env.PORT;
 
-const dbm = new DBManager();
+const dbm = new DBManager(PORT);
 dbm.connect(DB_URL)
 
 process.once('SIGINT', function () {

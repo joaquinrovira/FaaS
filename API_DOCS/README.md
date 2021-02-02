@@ -29,7 +29,7 @@ Endpoint used to manage users' **functions**.
 * [Get function details](functions/get.md) : `GET /u/:u_name/fn/:f_name`
 * [Register function](functions/post.md) : `POST /u/:u_name/fn/:f_name`
 * [Unregister function](functions/delete.md) : `DELETE /u/:u_name/fn/:f_name`
-* [Execute function](functions/run.md) : `POST /u/:u_name/fn/:f_name/run`
+* [Execute function](functions/execute.md) : `POST /u/:u_name/fn/:f_name/run`
 
 
 ## Jobs

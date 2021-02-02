@@ -16,7 +16,7 @@ class Frontend {
         const app = express();
         this.app = app;
         this.app.use((req, res, next) => {
-            console.log(req.originalUrl);
+            console.log('[REQ] ', req.originalUrl);
             next()
         })
         this.init_routes()

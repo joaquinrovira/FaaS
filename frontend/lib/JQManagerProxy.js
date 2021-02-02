@@ -6,6 +6,7 @@ class JQManagerProxy {
         this._socket.connect(url)
     }
 
+    // TODO: socket pool for managing multiple calls
     async _remote_call_function(params) {
         await this._socket.send(params);
         let response = await this._socket.receive()
