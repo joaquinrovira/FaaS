@@ -10,5 +10,5 @@ done
 
 for w in "database" "frontend" "job-queue" "worker"; do
     echo -e "\e[36m##\e[35m Pushing image \e[33mzmq:$w\e[32m:\e[0m"
-    docker push $USER/zmq:$w$VERSION
+    docker push $USER/faas:$w$VERSION
 done

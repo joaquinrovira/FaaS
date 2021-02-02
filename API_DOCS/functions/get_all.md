@@ -6,7 +6,7 @@ List the current functions registered to a user. Responds with an object where t
 
 **Method** : `GET`
 
-**Response** : `[string]`
+**Response** : `{ key: string }`
 
 
 ## Example
