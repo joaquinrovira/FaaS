@@ -56,8 +56,8 @@ class JQManager {
     async init_comms() {
         // Bind socket
         this.socket = new zmq.Router();
-        await this.socket.bind(`tcp://*:${this.bind_port}`);
-        console.log(`JQManager listening on port ${this.bind_port}`);
+        await this.socket.bind(`tcp://\*:${this.bind_port}`);
+        console.log(`[OK] JQManager listening on port ${this.bind_port}`);
 
         // Get valid function names
         this.functions = { queue: '', dequeue: '', get_job: '' };

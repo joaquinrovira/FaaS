@@ -11,6 +11,7 @@ class DBManager {
 
         try {
             await this.client.connect();
+            console.log(`[OK] Connected to MongoDB on <${uri}>`);
             await this.init_comms();
 
             const db = this.client.db('faas');
@@ -193,8 +194,8 @@ class DBManager {
     async init_comms() {
         // Bind socket
         this.socket = new zmq.Router();
-        await this.socket.bind(`tcp://*:${this.bind_port}`);
-        console.log(`BDManager listening on port ${this.bind_port}`);
+        await this.socket.bind(`tcp://\*:${this.bind_port}`);
+        console.log(`[OK] DBManager listening on port ${this.bind_port}`);
 
         // Get valid function names
         const filter_out = ['constructor', 'connect', 'connected', 'init_comms', 'loop_cooms', 'functions', '_validate_job_id']

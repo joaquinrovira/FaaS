@@ -1,4 +1,5 @@
-URL="localhost"
+#URL="localhost"
+URL="https://faas-joarosa.vera.kumori.cloud" # curl -k ==> Insecure (ignores ssl cert)
 
 echo -e "\e[36m>\e[32m Add user:\e[0m"
 curl -X POST $URL/u/user1
