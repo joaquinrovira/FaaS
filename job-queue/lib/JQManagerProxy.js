@@ -39,13 +39,13 @@ class JQManagerProxy {
     }
     // User calls
     async queue(u_name, f_name, argv) {
-        return this._remote_call_function(['queue', u_name, f_name, argv]);
+        return await this._remote_call_function(['queue', u_name, f_name, argv]);
     }
     async dequeue(job_id) {
-        return this._remote_call_function(['dequeue', job_id]);
+        return await this._remote_call_function(['dequeue', job_id]);
     }
     async get_job() {
-        return this._remote_call_function(['get_job']);
+        return await this._remote_call_function(['get_job']);
     }
 }
 

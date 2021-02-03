@@ -35,7 +35,7 @@ class DBManager {
     // User calls
     async add_user(u_name) {
         const query = { name: u_name };
-        const update = { $set: { name: u_name, functions: {} } };
+        const update = { $set: { name: u_name, functions: {}, execution_time_ms: 0 } };
         const options = { upsert: true };// Create new if not exists
 
         let res = await this.users.updateOne(query, update, options);
@@ -48,6 +48,23 @@ class DBManager {
         let res = await this.users.deleteOne(query);
         console.log(`[OK] User <${u_name}> removed.`)
         return res.result.ok
+    }
+    async add_execution_time_ms(u_name, _execution_time_ms) {
+        const execution_time_ms = parseFloat(_execution_time_ms);
+        const query = { name: u_name };
+        const update = { $inc: { execution_time_ms } };
+
+        let res = await this.users.updateOne(query, update);
+        console.log(`[OK] User <${u_name}> added <${execution_time_ms}>ms.`)
+        return res.result.ok
+    }
+    async get_execution_time_ms(u_name) {
+        const query = { name: u_name };
+
+        let res = await this.users.findOne(query);
+        if (!res) throw `[ERR] User <${u_name}> does not exist.`
+        console.log(`[OK] User <${u_name}>'s functions found.`)
+        return res && res.execution_time_ms
     }
 
     // Function calls

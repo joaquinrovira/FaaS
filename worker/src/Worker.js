@@ -43,16 +43,20 @@ class Worker {
 
             // Execute job
             let result
+            let [time_start_seconds, time_start_nano] = process.hrtime();// Measure execution time
             try {
                 const fn = this.parseFunction(src);
                 const context = { fn, argv: job.argv, result: undefined };
-                const script = new vm.Script('result = fn(...argv)')
+                const script = new vm.Script('result = fn(...argv)');
                 script.runInNewContext(context);
                 result = context.result;
             } catch (err) {
                 result = err
             }
+            let [time_end_seconds, time_end_nano] = process.hrtime();// Measure execution time
+            let total_time = 1000 * (time_end_seconds - time_start_seconds) + (time_end_nano - time_start_nano) / 1000;
             dbm.set_job(job._id, 1, result);
+            dbm.add_execution_time(job.u_name, total_time);
         }
     }
 

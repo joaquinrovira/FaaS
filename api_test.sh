@@ -14,7 +14,7 @@ echo -e "\n\e[36m>\e[32m List user funtions:\e[0m"
 curl $URL/u/user1/fn
 
 echo -e "\n\e[36m>\e[32m Execute function:\e[0m"
-curl -X POST -d "[4,5]" $URL/u/user1/fn/add/run
+curl -X POST -d "[4,6]" $URL/u/user1/fn/add/run
 
 echo -e "\n\e[36m>\e[32m Get job status:\e[0m"
 JOB_ID=$(curl -s -X POST -d "[4,5]" $URL/u/user1/fn/add/run | python3 -c "import sys, json; print(json.load(sys.stdin)['res'])")
