@@ -1,6 +1,6 @@
 # Get function details
 
-Get the details of a given users' function. Responds with an object with two parameters `f_name` and `src`. 
+Get the details of a given user's function. Responds with an object with two parameters `f_name` and `src`. 
 
 - `f_name` is the same function name as requested.
 - `src` is the source code of the function.

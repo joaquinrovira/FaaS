@@ -46,6 +46,10 @@ class Frontend {
             let response = await dbm.remove_user(req.params.u_name);
             res.send(response);
         });
+        app.get('/u/:u_name/time', async function (req, res) {
+            let response = await dbm.get_execution_time_ms(rep.params.u_name);
+            res.send(response);
+        });
 
         // Function routes
         app.get('/u/:u_name/fn', async function (req, res) {

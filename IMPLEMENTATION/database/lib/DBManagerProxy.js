@@ -47,6 +47,9 @@ class DBManagerProxy {
     async add_execution_time(u_name, execution_time_ms) {
         return await this._remote_call_function(['add_execution_time_ms', u_name, execution_time_ms]);
     }
+    async get_execution_time_ms(u_name) {
+        return await this._remote_call_function(['get_execution_time_ms', u_name]);
+    }
 
     // Function calls
     async get_user_functions(u_name) {

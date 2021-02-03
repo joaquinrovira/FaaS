@@ -17,8 +17,9 @@ If the request completes successfully with `error: false`, the response parament
 
 Endpoint used to manage existing **users**. Basic implementation with no secutity checks.
 
-* [Registration](users/post.md) : `POST /u/:u_name`
+* [Register](users/post.md) : `POST /u/:u_name`
 * [Unregister](users/delete.md) : `DELETE /u/:u_name`
+* [Get accumulated execution time](users/time.md) : `GET /u/:u_name/time`
 
 
 ## Functions

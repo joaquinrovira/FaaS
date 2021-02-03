@@ -1,4 +1,4 @@
-# List users' functions
+# List user's functions
 
 List the current functions registered to a user. Responds with an object where the keys are the function names and the values the source code of the function.
 
