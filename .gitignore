@@ -2,3 +2,5 @@
 .vscode/
 cert/
 **/node_modules
+package-lock*
+*ManagerProxySingle.js

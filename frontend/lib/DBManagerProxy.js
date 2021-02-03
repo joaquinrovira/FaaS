@@ -1,15 +1,36 @@
 const zmq = require("zeromq");
+const genericPool = require("generic-pool");
 
 class DBManagerProxy {
     constructor(url) {
-        this._socket = new zmq.Request();
-        this._socket.connect(url)
+        const factory = {
+            create: () => {
+                const socket = new zmq.Request();
+                socket.connect(url);
+                return socket;
+            },
+
+            destroy: (socket) => {
+                socket.disconnect();
+            }
+        }
+
+        const opts = {
+            max: 10,
+            min: 2
+        }
+
+        this._socket_pool = genericPool.createPool(factory, opts);
     }
 
     // TODO: socket pool for managing multiple calls
     async _remote_call_function(params) {
-        await this._socket.send(params);
-        let response = await this._socket.receive()
+        const socket = await this._socket_pool.acquire(); // Acquire socket from pool
+
+        await socket.send(params);
+        let response = await socket.receive(); // Release socket to pool 
+
+        this._socket_pool.release(socket);
         try {
             response = JSON.parse(response.toString())
         } catch (err) {
