@@ -3,5 +3,4 @@
 cert/
 **/node_modules
 *package-lock.json
-*ManagerProxySingle.js
-*.sh
+*gitignore
