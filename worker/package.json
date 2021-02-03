@@ -4,7 +4,8 @@
   "description": "MUCPD FaaS worker.",
   "main": "index.js",
   "dependencies": {
-    "zeromq": "^6.0.0-beta.6"
+    "zeromq": "^6.0.0-beta.6",
+    "generic-pool": "^3.7.1"
   },
   "devDependencies": {},
   "scripts": {

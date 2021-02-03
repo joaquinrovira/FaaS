@@ -5,7 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "express": "^4.17.1",
-    "zeromq": "^6.0.0-beta.6"
+    "zeromq": "^6.0.0-beta.6",
+    "generic-pool": "^3.7.1"
   },
   "devDependencies": {},
   "author": "Joaquin Rovira",

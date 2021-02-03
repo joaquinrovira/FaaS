@@ -1,4 +1,5 @@
 const zmq = require("zeromq");
+const genericPool = require("generic-pool");
 
 class JQManagerProxy {
     constructor(url) {
@@ -22,7 +23,6 @@ class JQManagerProxy {
         this._socket_pool = genericPool.createPool(factory, opts);
     }
 
-    // TODO: socket pool for managing multiple calls
     async _remote_call_function(params) {
         const socket = await this._socket_pool.acquire(); // Acquire socket from pool
 

@@ -23,7 +23,6 @@ class DBManagerProxy {
         this._socket_pool = genericPool.createPool(factory, opts);
     }
 
-    // TODO: socket pool for managing multiple calls
     async _remote_call_function(params) {
         const socket = await this._socket_pool.acquire(); // Acquire socket from pool
 

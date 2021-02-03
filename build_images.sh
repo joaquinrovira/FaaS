@@ -5,7 +5,7 @@
 ## > kill 1
 
 USER="piturriti1"
-VERSION="v3"
+VERSION="v6"
 for w in "database" "frontend" "job-queue" "worker"; do
     echo -e "\e[36m##\e[32m Building image \e[33mfaas:$w$VERSION\e[32m:\e[0m"
     echo -e "Copying proxy classes."
