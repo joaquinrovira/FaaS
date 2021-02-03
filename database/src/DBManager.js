@@ -9,9 +9,13 @@ class DBManager {
         this.uri = uri || 'mongodb://127.0.0.1:27017'
         this.client = new MongoClient(this.uri, { useUnifiedTopology: true });
 
+        while (!this.client.isConnected()) {
+            try { await this.client.connect() }
+            catch (err) { console.log(`[ERR] ${err.errmsg}, retrying...`) }
+        }
+        console.log(`[OK] Connected to MongoDB on <${this.uri}>`);
+
         try {
-            await this.client.connect();
-            console.log(`[OK] Connected to MongoDB on <${uri}>`);
             await this.init_comms();
 
             const db = this.client.db('faas');
