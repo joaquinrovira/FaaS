@@ -3,34 +3,92 @@ const zmq = require("zeromq");
 
 class DBManager {
 
-    constructor(bind_port) { this.bind_port = bind_port || 27444; }
+    constructor(bind_port) { this.bind_port = bind_port || 27444; }// Sets listening port.
 
     async connect(uri) {
+        // Configure MongoClient location.
         this.uri = uri || 'mongodb://127.0.0.1:27017'
         this.client = new MongoClient(this.uri, { useUnifiedTopology: true });
 
+        // If connection fails, retry until successful.
         while (!this.client.isConnected()) {
             try { await this.client.connect() }
             catch (err) { console.log(`[ERR] ${err.errmsg}, retrying...`) }
         }
         console.log(`[OK] Connected to MongoDB on <${this.uri}>`);
 
-        try {
-            await this.init_comms();
+        // On successful connection, get references to tables and collections.
+        const db = this.client.db('faas');
+        this.users = db.collection('users');
+        this.jobs = db.collection('jobs');
 
-            const db = this.client.db('faas');
-            this.users = db.collection('users');
-            this.jobs = db.collection('jobs');
-
-
-        } catch (err) { console.log(err) }
+        // Setup ZeroMQ listener for requests.
+        await this.init_comms();
     }
+
     close() {
+        // Once the service finishes, stop the server gracefully.
         if (this.connected) this.client.close()
         this.socket.close()
     }
 
-    get connected() { return this.client && this.client.isConnected() }
+    // Setup communications
+    async init_comms() {
+        // Bind socket
+        this.socket = new zmq.Router();
+        await this.socket.bind(`tcp://\*:${this.bind_port}`);
+        console.log(`[OK] DBManager listening on port ${this.bind_port}`);
+
+        // Get valid function names, filtering out invalid function calls.
+        const filter_out = ['constructor', 'connect', 'init_comms', 'loop_cooms', 'functions', '_validate_job_id']
+        let functions = Object.getOwnPropertyNames(DBManager.prototype);
+        functions = functions.filter((e) => !(filter_out.includes(e))).reduce((acc, curr) => (acc[curr] = 0, acc), {});// Convert to dict
+        this.functions = functions;
+
+        // Start message receive loop
+        this.loop_cooms()
+    }
+
+    async loop_cooms() {
+        // Once a message is received, execute the relevant function from this.functions
+        // Arrow function to mainain closure
+        let process_msg = async (id, _f_name, _argv) => {
+            let f_name = _f_name.toString()
+            let argv = _argv.map((arg) => arg.toString())
+            let response = { error: null, res: null }
+
+            // If function not in the valid functions set, send back an error.
+            if (!(f_name in this.functions)) {
+                response.res = `[ERR] Invalid remote call [${f_name}(${argv})]`
+                response.error = true
+                console.log(response.res);
+            } else {
+                // If it's a valid remote call, execute it
+                console.log(`[OK] Remote call [${f_name}(${argv})]`);
+                try {
+                    // Execute command
+                    response.res = await this[f_name](...argv)
+                    response.error = false
+                } catch (err) {
+                    // If any error occurs during function execution, return the message error.
+                    response.res = err.toString()
+                    response.error = true
+                }
+            }
+
+            // Send back the result of the function call.
+            this.socket.send([id, '', JSON.stringify(response)])
+        }
+
+        // For every message received, process it.
+        for await (const [id, _, _f_name, ..._argv] of this.socket) {
+            await process_msg(id, _f_name, _argv);
+        }
+    }
+
+    //
+    //  VALID REMOTE CALLS BELOW
+    //
 
     // User calls
     async add_user(u_name) {
@@ -209,59 +267,11 @@ class DBManager {
         console.log(`[OK] All collections deleted.`)
         return 1;
     }
-
-
-    // Communications
-    async init_comms() {
-        // Bind socket
-        this.socket = new zmq.Router();
-        await this.socket.bind(`tcp://\*:${this.bind_port}`);
-        console.log(`[OK] DBManager listening on port ${this.bind_port}`);
-
-        // Get valid function names
-        const filter_out = ['constructor', 'connect', 'connected', 'init_comms', 'loop_cooms', 'functions', '_validate_job_id']
-        let functions = Object.getOwnPropertyNames(DBManager.prototype);
-        functions = functions.filter((e) => !(filter_out.includes(e))).reduce((acc, curr) => (acc[curr] = 0, acc), {});// Convert to dict
-        this.functions = functions;
-
-        // Message receive loop
-        this.loop_cooms()
-    }
-
-    async loop_cooms() {
-        // Arrow function to mainain closure
-        let process_msg = async (id, _f_name, _argv) => {
-            let f_name = _f_name.toString()
-            let argv = _argv.map((arg) => arg.toString())
-            let response = { error: null, res: null }
-
-            if (!(f_name in this.functions)) {
-                response.res = `[ERR] Invalid remote call [${f_name}(${argv})]`
-                response.error = true
-                console.log(response.res);
-            } else {
-                console.log(`[OK] Remote call [${f_name}(${argv})]`);
-                try {
-                    // Execute command
-                    response.res = await this[f_name](...argv)
-                    response.error = false
-                } catch (err) {
-                    response.res = err.toString()
-                    response.error = true
-                }
-            }
-            this.socket.send([id, '', JSON.stringify(response)])
-        }
-
-        for await (const [id, _, _f_name, ..._argv] of this.socket) {
-            process_msg(id, _f_name, _argv);
-        }
-    }
 }
 
 module.exports = DBManager
 
-// Execute only if not being require()-d
+// Execute only if not being require()-d (OPTIONAL)
 if (require.main === module) {
     const dbm = new DBManager();
     dbm.connect()
