@@ -43,7 +43,7 @@ import k "kumori.systems/kumori/kmv"
           name: "registry.hub.docker.com"
           secret: ""
         }
-        tag: "piturriti1/faas:workerv6"
+        tag: "piturriti1/faas:workerv10"
       }
       mapping: {
         filesystem: []
