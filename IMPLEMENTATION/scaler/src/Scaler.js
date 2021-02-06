@@ -113,14 +113,18 @@ class Scaler {
             const current_workers = await this.get_current_workers();
             console.log('[OK] Current workers:', current_workers);
 
-            if (isFinite(current_queue_length) && current_queue_length < QUEUE_MIN && current_workers > WORKER_MIN) {
+            if (isFinite(current_queue_length) && current_queue_length < QUEUE_MIN && current_workers >= WORKER_MIN) {
                 // Half worker pool with min value of 1
-                fs.writeFileSync('manifests/variables/num_workers/manifest.cue', `${MANIFEST_STRING} ${parseInt(current_workers / 2)}`);
+                const new_workers = parseInt(current_workers / 2);
+                console.log(`[OK] Downscaling to <${new_workers}> workers.`);
+                fs.writeFileSync('manifests/variables/num_workers/manifest.cue', `${MANIFEST_STRING} ${new_workers}`);
                 await this.update_deployment();
 
             } else if (isFinite(current_queue_length) && current_queue_length > QUEUE_MAX && current_workers < WORKER_MAX) {
                 // Double worker pool with max value of 64
-                fs.writeFileSync('manifests/variables/num_workers/manifest.cue', `${MANIFEST_STRING} ${parseInt(current_workers * 2)}`);
+                const new_workers = parseInt(current_workers * 2);
+                console.log(`[OK] Upscaling to <${new_workers}> workers.`);
+                fs.writeFileSync('manifests/variables/num_workers/manifest.cue', `${MANIFEST_STRING} ${new_workers}`);
                 await this.update_deployment();
             }
 
