@@ -116,12 +116,12 @@ class Scaler {
             if (isFinite(current_queue_length) && current_queue_length < QUEUE_MIN && current_workers > WORKER_MIN) {
                 // Half worker pool with min value of 1
                 fs.writeFileSync('manifests/variables/num_workers/manifest.cue', `${MANIFEST_STRING} ${parseInt(current_workers / 2)}`);
-                await update_deployment();
+                await this.update_deployment();
 
             } else if (isFinite(current_queue_length) && current_queue_length > QUEUE_MAX && current_workers < WORKER_MAX) {
                 // Double worker pool with max value of 64
                 fs.writeFileSync('manifests/variables/num_workers/manifest.cue', `${MANIFEST_STRING} ${parseInt(current_workers * 2)}`);
-                await update_deployment();
+                await this.update_deployment();
             }
 
             // Sleep for 15 seconds
