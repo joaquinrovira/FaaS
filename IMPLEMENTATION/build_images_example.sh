@@ -1,5 +1,5 @@
 USER="piturriti1"
-VERSION="v19"
+VERSION="v20"
 
 # Copy deployment to Scaler
 rm -r scaler/manifests/*

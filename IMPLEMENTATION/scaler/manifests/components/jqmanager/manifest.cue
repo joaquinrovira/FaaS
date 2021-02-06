@@ -42,7 +42,7 @@ import k "kumori.systems/kumori/kmv"
           name: "registry.hub.docker.com"
           secret: ""
         }
-        tag: "piturriti1/faas:job-queuev19"
+        tag: "piturriti1/faas:job-queuev20"
       }
       mapping: {
         filesystem: []
