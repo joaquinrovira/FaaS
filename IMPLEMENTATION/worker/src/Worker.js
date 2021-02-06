@@ -53,10 +53,24 @@ class Worker {
             let result
             let [time_start_seconds, time_start_nano] = process.hrtime();// Measure execution time
             try {
-                const fn = this.parseFunction(src);
-                const context = { fn, argv: job.argv, result: undefined };
-                const script = new vm.Script('result = fn(...argv)');
+                const vm_add_ons = { setTimeout, setTimeout, setInterval }
+                const context = { argv: job.argv, result: undefined, promise: undefined, ...vm_add_ons };
+
+                const script = new vm.Script(`
+                const fn = ${src};
+                promise = new Promise( async (resolve, reject)=>{
+                    try{
+                        result = await fn(...argv);
+                        resolve(result)
+                    } catch (error) { reject(error) }
+                });
+                `);
+
+                //!!! NOTE: Does NOT run code securely
                 script.runInNewContext(context);
+                //!!! END NOTE
+
+                await context.promise
                 result = context.result;
             } catch (err) {
                 result = err
@@ -66,34 +80,6 @@ class Worker {
             dbm.set_job(job._id, 1, result);
             dbm.add_execution_time(job.u_name, total_time);
         }
-    }
-
-    // https://gist.github.com/lamberta/3768814
-    /* Parse a string function definition and return a function object. Does not use eval.
-     * @param {string} str
-     * @return {function}
-     *
-     * Example:
-     *  var f = function (x, y) { return x * y; };
-     *  var g = parseFunction(f.toString());
-     *  g(33, 3); //=> 99
-     */
-    parseFunction(str) {
-        var fn_body_idx = str.indexOf('{'),
-            fn_body = str.substring(fn_body_idx + 1, str.lastIndexOf('}')),
-            fn_declare = str.substring(0, fn_body_idx),
-            fn_params = fn_declare.substring(fn_declare.indexOf('(') + 1, fn_declare.lastIndexOf(')')),
-            args = fn_params.split(',');
-
-        args.push(fn_body);
-
-        function Fn() {
-            //return Function.apply(this, args);
-            return Function.apply(undefined, args); // Remove context from call
-        }
-        Fn.prototype = Function.prototype;
-
-        return new Fn();
     }
 }
 
