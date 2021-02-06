@@ -9,11 +9,13 @@ RUN apt update && apt install -yq nodejs npm python3 make
 RUN apt install -y python3-pip
 RUN pip3 install --no-cache --upgrade pip setuptools
 
-
 # Copy source files to /app
 RUN mkdir /app
 WORKDIR /app
 COPY . .
 RUN npm install
+
+# Add binanies folder to $PATH for <kumorictl> to find <cue>
+ENV PATH="$PATH:/app/bin"
 
 CMD [ "node", "src/index.js" ]
