@@ -1,0 +1,19 @@
+# node:alpine is prefered. However, it doesn't have the tool require to 
+# builed the required NodeJS modules.
+
+FROM ubuntu
+
+# python3 and make necessary to npm install
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt install -yq nodejs npm python3 make
+RUN apt install -y python3-pip
+RUN pip3 install --no-cache --upgrade pip setuptools
+
+
+# Copy source files to /app
+RUN mkdir /app
+WORKDIR /app
+COPY . .
+RUN npm install
+
+CMD [ "node", "src/index.js" ]

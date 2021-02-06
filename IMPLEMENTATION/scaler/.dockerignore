@@ -1,0 +1,6 @@
+.dockerignore
+dockerfile
+**package-lock.json
+**node_modules
+*KUMORI_CREDENTIALS
+*ScalerHTTPS.js

@@ -99,6 +99,12 @@ class Frontend {
             res.send(response);
         })
 
+        // Helper route - monitor job queue
+        app.get('/jobqueuelength', async function (req, res) {
+            let response = await jqm.get_queue_length();
+            res.send(response);
+        })
+
         // If no route, send 404
         app.use(function (_, res) {
             res.sendStatus(404);

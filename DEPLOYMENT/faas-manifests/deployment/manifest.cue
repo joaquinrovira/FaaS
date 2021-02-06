@@ -3,6 +3,7 @@ package calculator_deployment
 import (
   k "kumori.systems/kumori/kmv"
   c "joarosa.systems/faas/service:calculator"
+  nw "joarosa.systems/faas/variables/num_workers"
 )
 
 #Manifest: k.#MakeDeployment & {
@@ -19,20 +20,12 @@ import (
       description: role: dbmanager: rsize: $_instances: 1
       description: role: jqmanager: rsize: $_instances: 1
       description: role: frontend: rsize: $_instances: 1
-      description: role: worker: rsize: $_instances: 1
+      description: role: worker: rsize: $_instances: nw.#NUM_WORKERS
+      description: role: scaler: rsize: $_instances: 1
     }
 
     config: {
-      parameter: {
-        frontend: {
-          config: {
-            param_one : "myparam_one"
-            param_two : 123
-          }
-          calculatorEnv: "The_calculator_env_value"
-          restapiclientPortEnv: "80"
-        }
-      }
+      parameter: {}
     }
   }
 }

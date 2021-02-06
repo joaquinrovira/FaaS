@@ -25,7 +25,7 @@ import k "kumori.systems/kumori/kmv"
     }
 
     size: {
-      $_memory: *"100Mi" | uint
+      $_memory: *"1000Mi" | uint
       $_cpu: *"100m" | uint
     }
 

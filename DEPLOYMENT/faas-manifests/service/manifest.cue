@@ -7,6 +7,7 @@ import (
   jqmanager "joarosa.systems/faas/components/jqmanager"
   frontend  "joarosa.systems/faas/components/frontend"
   worker    "joarosa.systems/faas/components/worker"
+  scaler    "joarosa.systems/faas/components/scaler"
 )
 
 let memongodb = mongodb.#Manifest
@@ -14,6 +15,7 @@ let medbmanager = dbmanager.#Manifest
 let mejqmanager = jqmanager.#Manifest
 let mefrontend = frontend.#Manifest
 let meworker = worker.#Manifest
+let mescaler = scaler.#Manifest
 
 #Manifest: k.#ServiceManifest & {
 
@@ -41,6 +43,7 @@ let meworker = worker.#Manifest
         jqmanager:  mejqmanager.description.config.parameter
         frontend:   mefrontend.description.config.parameter
         worker:     meworker.description.config.parameter
+        scaler:     mescaler.description.config.parameter
       }
       resource: {}
     }
@@ -67,6 +70,10 @@ let meworker = worker.#Manifest
       worker: artifact: meworker
       worker: cfg: parameter: config.parameter.worker
 
+      scaler: k.#Role
+      scaler: artifact: mescaler
+      scaler: cfg: parameter: config.parameter.scaler
+
     }
 
     connector: {
@@ -77,6 +84,7 @@ let meworker = worker.#Manifest
       mongoconnector:   {kind: "lb"}
       wdbmconnector:    {kind: "lb"}
       wjqmconnector:    {kind: "lb"}
+      sjqmconnector:    {kind: "lb"}
       
     }
 
@@ -108,6 +116,10 @@ let meworker = worker.#Manifest
       // Worker -> JQManager (LB connector)
 			worker: jqclient: to: "wjqmconnector"
       wjqmconnector: to: jqmanager: "entrypoint"
+
+      // Scaler -> JQManager (LB connector)
+			scaler: jqclient: to: "sjqmconnector"
+      sjqmconnector: to: jqmanager: "entrypoint"
    }
   }
 }

@@ -36,7 +36,7 @@ class JQManager {
         console.log(`[OK] JQManager listening on port ${this.bind_port}`);
 
         // Valid remote function calls stored as dictionary
-        this.functions = { queue: '', dequeue: '', get_job: '' };
+        this.functions = { queue: '', dequeue: '', get_job: '', get_queue_length: '' };
 
         // Message receive loop
         this.loop_cooms()
@@ -110,6 +110,11 @@ class JQManager {
         let job = this.job_list.shift()
         console.log(`[OK] Sent ${typeof job === 'undefined' ? 0 : 1}, <${this.job_list.length}> job(s) left.`)
         return job;
+    }
+
+    async get_queue_length() {
+        console.log(`[OK] Measured queue length of <${this.job_list.length}>`);
+        return this.job_list.length;
     }
 }
 
