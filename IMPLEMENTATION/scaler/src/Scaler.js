@@ -20,8 +20,6 @@ class Scaler {
 
     close() { this.stop = true; }
 
-    async get_queue_length() { return await this.jqm.get_queue_length(); }
-
     async kumori_login() {
         process.stdout.write(`[OK] Attempting login...`)
 
@@ -106,11 +104,21 @@ class Scaler {
 
         // Control service worker amount
         while (!this.stop) {
-            const current_queue_length = parseInt((await this.get_queue_length()).res);
+            let current_queue_length;
+            try { current_queue_length = parseInt((await this.jqm.get_queue_length()).res); }
+            catch (error) {
+                console.log(`[ERR] Getting queue length: ${error}`)
+                continue;
+            }
             console.log(`[OK] Job queue length: ${current_queue_length}`);
 
 
-            const current_workers = await this.get_current_workers();
+            let current_workers;
+            try { current_workers = await this.get_current_workers(); }
+            catch (error) {
+                console.log(`[ERR] Getting current workers: ${error}`)
+                continue;
+            }
             console.log('[OK] Current workers:', current_workers);
 
             if (isFinite(current_queue_length) && current_queue_length < QUEUE_MIN && current_workers >= WORKER_MIN) {
@@ -118,14 +126,19 @@ class Scaler {
                 const new_workers = parseInt(current_workers / 2);
                 console.log(`[OK] Downscaling to <${new_workers}> workers.`);
                 fs.writeFileSync('manifests/variables/num_workers/manifest.cue', `${MANIFEST_STRING} ${new_workers}`);
-                await this.update_deployment();
+
+                try { await this.update_deployment(); }
+                catch (error) { console.log(`[ERR] Downscaling workers: ${error}`) }
+
 
             } else if (isFinite(current_queue_length) && current_queue_length > QUEUE_MAX && current_workers < WORKER_MAX) {
                 // Double worker pool with max value of 64
                 const new_workers = parseInt(current_workers * 2);
                 console.log(`[OK] Upscaling to <${new_workers}> workers.`);
                 fs.writeFileSync('manifests/variables/num_workers/manifest.cue', `${MANIFEST_STRING} ${new_workers}`);
-                await this.update_deployment();
+
+                try { await this.update_deployment(); }
+                catch (error) { console.log(`[ERR] Downscaling workers: ${error}`) }
             }
 
             // Sleep for 15 seconds
