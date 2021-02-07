@@ -72,7 +72,7 @@ On startup it receives initialization data through environment variables:
 
 In order to auto-scale the service depending on the current workload a [scaler component](IMPLEMENTATION/scaler) is implemented. It will query the JQManager for the size of the current job backlog. If it grows too much, the number of workers will increase (up to a maximum) and if the workload diminishes the number of workers will decrease (down to a minimum).
 
-It must be noted that the credentials of the service must be given to the scaler component on deployment. A file called `KUMORI_CREDENTIALS` must be located on the components' working directory and it must contain the username and the password, separated by a **new line**:
+**IMPORTANT NOTE:** The credentials of the service must be given to the scaler component on deployment. A file called `KUMORI_CREDENTIALS` must be located on the components' working directory and it must contain the username and the password, separated by a **new line**:
 
 ```
 <username>
