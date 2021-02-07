@@ -130,7 +130,7 @@ Execution requests are sent as described in the [REST API](API_DOCS/functions/ex
 
 After sending an execution request, an execution ID will be received in response. One can [poll the job status](API_DOCS/jobs/get_status.md) and once the stated changes to `1`, the [execution result can be requested](API_DOCS/jobs/get_result.md).
 
-### How does the service auto-scaler?
+### How does the service auto-scale?
 
 Every couple of seconds, the scaler component polls the JQManager's job queue length and if it grows too much the number of workers is doubled (up to a maximum). The exact implementation can be found [here](IMPLEMENTATION/scaler/src/Scaler.js#L106-L146).
 
