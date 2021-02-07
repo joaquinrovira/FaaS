@@ -80,12 +80,12 @@ class Frontend {
             res.send(response);
 
         })
-
-        // Job routes
         app.post('/u/:u_name/fn/:f_name/run', async function (req, res) {
             let response = await jqm.queue(req.params.u_name, req.params.f_name, req.body);
             res.send(response);
         })
+
+        // Job routes
         app.get('/j/:job_id', async function (req, res) {
             let response = await dbm.get_job_status(req.params.job_id);
             res.send(response);

@@ -10,7 +10,7 @@ Register a function. As this is a basic implementation, it doesn't do any code v
 
 **Data constraints**
 
-The body of the `POST` request must be the source code of the function. Any content-type allowed. 
+The body of the `POST` request must be the source code of the function. Any content-type and async functions are allowed.
 
 *Example body:* 
 ```

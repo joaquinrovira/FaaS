@@ -4,10 +4,10 @@
  *
  * Connection parameters are passed in via environment variables:
  *
- *      DB_URL: Specifies the location and protocol of the database manager (DBManager) service.
+ *      DB_URL: Specifies the location and protocol of the job-queue manager (DBManager) service.
  *              Must be a valid [ZeroMQ](https://zguide.zeromq.org/docs/) connection string.
  *
- *      PORT:   Specifies the PORT on which the database manager will listen for ZeroMQ connections.
+ *      PORT:   Specifies the PORT on which the job-queue manager will listen for ZeroMQ connections.
  */
 
 const JQManager = require("./JQManager");
