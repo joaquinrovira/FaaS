@@ -124,7 +124,7 @@ async function add_with_delay(a,b) {
 
 ### How are execution requests sent to the system?
 
-Execution requests are sent as described in the [REST API](API_DOCS/function/execute.md).
+Execution requests are sent as described in the [REST API](API_DOCS/functions/execute.md).
 
 ### How are executiong results gathered?
 
