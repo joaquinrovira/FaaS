@@ -2,7 +2,7 @@
 
 ## Description
 
-This project's aim is to build and deploy a basic Functions-as-a-Service platform capable of handling on demand computation of arbitrary functions. It will be served as REST API ([documentation here](API_DOCS/README.md)) with simplistic user services, monitoring and auto-scaling.
+This project's aim is to build and deploy a basic Functions-as-a-Service platform capable of handling on demand computation of arbitrary functions. It will be served as REST API ([documentation here](API_DOCS)) with simplistic user services, monitoring and auto-scaling.
 
 ## Implementation
 
