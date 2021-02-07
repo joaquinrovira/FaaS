@@ -121,7 +121,7 @@ class Scaler {
             }
             console.log('[OK] Current workers:', current_workers);
 
-            if (isFinite(current_queue_length) && current_queue_length < QUEUE_MIN && current_workers >= WORKER_MIN) {
+            if (isFinite(current_queue_length) && current_queue_length < QUEUE_MIN && current_workers > WORKER_MIN) {
                 // Half worker pool with min value of 1
                 const new_workers = parseInt(current_workers / 2);
                 console.log(`[OK] Downscaling to <${new_workers}> workers.`);
