@@ -32,7 +32,7 @@ class Worker {
             console.log('## Received job.')
             console.log("GET_JOB_JQ:", response)
 
-            // If there are no jobs in queue, sleep for 1 second and restart loop.
+            // If there are no jobs in queue, sleep and restart loop.
             if (typeof response.res === 'undefined') {
                 await (new Promise((resolve) => { setTimeout(resolve, 2000); }));
                 continue;
@@ -67,7 +67,7 @@ class Worker {
                 `);
 
                 //!!! NOTE: Does NOT run code securely
-                script.runInNewContext(context);
+                script.runInNewContext(context, { timeout: 900000 });
                 //!!! END NOTE
 
                 await context.promise
