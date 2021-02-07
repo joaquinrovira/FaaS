@@ -107,7 +107,7 @@ Each component module it describes among other things the docker image it uses (
 The functions must be specified as [NodeJS](https://www.nodejs.dev) function. They can be both asynchronous or syncronous and be executable in a [sandboxed vm](https://nodejs.org/api/vm.html#vm_script_runinnewcontext_contextobject_options) environment. The precise method of function execution can be found [here](IMPLEMENTATION/worker/src/Worker.js#L52-L81). For example, the following would be valid functions:
 
 ```js
-async function add(a,b) { return a + b; }
+function add(a,b) { return a + b; }
 ```
 
 ```js
