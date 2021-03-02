@@ -1,4 +1,4 @@
-# FaaS Project - MUCPD UPV
+# FaaS Project
 
 ## Description
 
